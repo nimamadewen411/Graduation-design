@@ -30,15 +30,17 @@ public class GitHubProvider {
         return null;
     }
 
-    public GitHubUser getUser(String accessTokenDTO){
+    public GitHubUser getUser(String accessToken){
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("https://api.github.com/user?access_token="+ accessTokenDTO)
+                .url("https://api.github.com/user")
+                .header("Authorization","token "+accessToken)
                 .build();
         try (Response response = client.newCall(request).execute()){
             String string = response.body().string();
             GitHubUser gitHubUser = JSON.parseObject(string, GitHubUser.class);
+            System.out.println(gitHubUser);
             return gitHubUser;
         } catch (IOException e) {
             e.printStackTrace();
